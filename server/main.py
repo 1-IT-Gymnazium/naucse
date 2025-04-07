@@ -13,18 +13,17 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 db_conn = Database()
 TRANSLATOR = pipeline("translation", model="Helsinki-NLP/opus-mt-en-cs")
 
-
-"""
-    Scrapes a website and filters words based on user's level.
-
-    - url (str): URL of website.
-    - user_id (str): User's ID.
-    - level (str): The level of the user.
-
-    :return: All of the words of the user.
-"""
 @app.route("/scrape", methods=["POST"])
 def scrape_website():
+    """
+        Scrapes a website and filters words based on user's level.
+    
+        - url (str): URL of website.
+        - user_id (str): User's ID.
+        - level (str): The level of the user.
+    
+        :return: All of the words of the user.
+    """
     try:
         data = request.get_json()
         url = data.get("url")
@@ -38,17 +37,16 @@ def scrape_website():
         return jsonify(res)
     except Exception:
         return jsonify("error-unknown", 500)
-
-
-"""
-    Translates english words using trained model.
-
-    - text (str): Text that should be translated.
-
-    :return: The translated text.
-"""
+        
 @app.route("/translate", methods=["POST"])
 def translate_text():
+    """
+        Translates english words using trained model.
+    
+        - text (str): Text that should be translated.
+    
+        :return: The translated text.
+    """
     try:
         data = request.get_json()
         text = data.get("text", "")
@@ -61,16 +59,16 @@ def translate_text():
     except Exception:
         return jsonify("error-unknown", 500)
 
-"""
-    Login check.
-
-    - name (str): User's name / username.
-    - password (str): User's password.
-
-    :return: Validates if user exists and then returns it.
-"""
 @app.route("/loginuser", methods=["POST"])
 def login_user():
+    """
+        Login check.
+    
+        - name (str): User's name / username.
+        - password (str): User's password.
+    
+        :return: Validates if user exists and then returns it.
+    """
     data = request.get_json()
     name = data.get("name")
     password = data.get("password")
@@ -89,18 +87,18 @@ def login_user():
     else:
         return jsonify("error-unknown", 500)
 
-"""
-    Sign up proccess for new user.
-
-    - name (str): User's name / username.
-    - email (str): User's email.
-    - level (str): User's level of english.
-    - password (str): User's password.
-
-    :return: Validates if users signup is valid.
-"""
 @app.route("/signupuser", methods=["POST"])
 def signup_user():
+    """
+        Sign up proccess for new user.
+    
+        - name (str): User's name / username.
+        - email (str): User's email.
+        - level (str): User's level of english.
+        - password (str): User's password.
+    
+        :return: Validates if users signup is valid.
+    """
     data = request.get_json()
     user_name = data.get("name")
     email = data.get("email")
@@ -116,15 +114,15 @@ def signup_user():
 
     return jsonify({"message": res}), 200
 
-"""
-    Check if user is still signed by special id.
-
-    - id (str): User's ID.
-
-    :return: Validated response based if it validated.
-"""
 @app.route("/checkuser", methods=["POST"])
 def check_user():
+    """
+        Check if user is still signed by special id.
+    
+        - id (str): User's ID.
+    
+        :return: Validated response based if it validated.
+    """
     data = request.get_json()
     id_user = data.get("id")
     res = db_conn.checkUser(id_user)
@@ -147,16 +145,16 @@ def removes():
     except Exception:
         return jsonify("error-remove", 500)
 
-"""
-    Add user's word to his word bank.
-
-    - id (str): User's ID.
-    - word (str): The word that should be added.
-
-    :return: Return validated responce.
-"""
 @app.route("/addwordbank", methods=["POST"])
 def addWordsUser():
+    """
+        Add user's word to his word bank.
+    
+        - id (str): User's ID.
+        - word (str): The word that should be added.
+    
+        :return: Return validated responce.
+    """
     try:
         data = request.get_json()
         id_user = data.get("id")
@@ -174,17 +172,16 @@ def addWordsUser():
     except Exception as e:
         return jsonify({"error": "error-add-word", "details": str(e)}), 500
 
-
-"""
-    Removes a word from the user's word bank.
-
-    - id (str): User's ID.
-    - word (str): The word that should be removed from word bank.
-
-    :return: Response of validated response.
-"""
 @app.route("/removewordbank", methods=["POST"])
 def removeWordsUser():
+    """
+        Removes a word from the user's word bank.
+    
+        - id (str): User's ID.
+        - word (str): The word that should be removed from word bank.
+    
+        :return: Response of validated response.
+    """
     try:
         data = request.get_json()
         id_user = data.get("id")
@@ -203,17 +200,16 @@ def removeWordsUser():
     except Exception as e:
         return jsonify({"error": "error-remove-word", "details": str(e)}), 500
 
-
-"""
-    Retrieves all words in the user's word bank.
-
-    Request Body:
-    - id (str): The user's ID.
-
-    :return: Response with the user's word bank.
-"""
 @app.route("/userwords", methods=["POST"])
 def getWordsUser():
+    """
+        Retrieves all words in the user's word bank.
+    
+        Request Body:
+        - id (str): The user's ID.
+    
+        :return: Response with the user's word bank.
+    """
     try:
         data = request.get_json()
         id_user = data.get("id")
