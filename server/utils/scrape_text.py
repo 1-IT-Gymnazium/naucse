@@ -3,6 +3,12 @@ import requests
 import re
 
 def scrape_text_utils(url: str):
+    """
+        Scrape visible text content from a webpage and return a list of lowercase words.
+         url (str): URL of website.
+    
+        :return: all words in lowercase
+    """
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
